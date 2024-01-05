@@ -1,0 +1,102 @@
+```{r}
+library(shiny)
+library(plotly)
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(scales)
+crunch_data <- read.csv("trial.csv")
+crunch_data
+```
+
+```{r}
+crunch_data$averageAmountOfMoneyByInvestors <- (crunch_data$Total.Funding.Amount.Currency..in.USD. / crunch_data$Number.of.Investors)
+crunch_data
+```
+
+```{r}
+ggplot(crunch_data, aes(x = Organization.Name, y = averageAmountOfMoneyByInvestors)) + 
+       geom_col() +
+       labs(title = "Average Amount of Money Invested By the Amount of Investors",
+            x = "Organization Name",
+            y = "$$") +
+       scale_y_continuous(labels = dollar)
+```
+```{r}
+fig <- plot_ly(y= crunch_data$averageAmountOfMoneyByInvestors, x= crunch_data$Organization.Name, type = "bar")
+fig <- fig %>% layout(yaxis=list(title = "Money (In Billions)"))
+
+fig
+```
+
+```{r}
+fig <- plot_ly(data = crunch_data, x = ~crunch_data$Organization.Name, y = ~crunch_data$averageAmountOfMoneyByInvestors, text = ~paste("Last Funding Type:", Last.Funding.Type))
+fig <- fig %>% layout(yaxis = list(title = "average Amount Of Money By Investors"), xaxis = list(title = 'Organization Name'))
+fig
+```
+
+
+```{r}
+ggplot(crunch_data, aes(x = log(averageAmountOfMoneyByInvestors))) +
+       geom_histogram(bins= 30) +
+       geom_vline(xintercept = )
+```
+
+
+```{r}
+fig <- plot_ly(x = log(crunch_data$averageAmountOfMoneyByInvestors), type = "histogram")
+fig
+```
+```{r}
+fig <- plot_ly(x = crunch_data$averageAmountOfMoneyByInvestors, type = "histogram")
+fig
+```
+
+
+
+```{r}
+ggplot(crunch_data, aes(x = Number.of.Investors, y = Total.Funding.Amount)) + 
+       geom_point() +
+       labs(title = "Total Funding Amount",
+            x = "Number of Investors",
+            y = "Total Funding Amount")
+```
+```{r}
+ggplot(crunch_data, aes(x = IPO.Status)) + 
+       geom_bar() +
+       labs(title = "IPO Status",
+            x = "Status",
+            y = "Count")
+```
+```{r}
+fig <- plot_ly(x = crunch_data$IPO.Status)
+fig <- fig %>% layout(yaxis = list(title = "Count of Companies"), xaxis = list(title = 'Company Status'))
+fig
+```
+
+```{r}
+ggplot(crunch_data, aes(x = Organization.Name, y = Number.of.Lead.Investors)) + 
+       geom_point() +
+       labs(title = "Amount of Lead Investors by Company",
+            x = "Company",
+            y = "Lead Investors") +
+       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+       
+```
+```{r}
+fig <- ggplot(crunch_data, aes(x = Number.of.Funding.Rounds, fill = Funding.Status)) + 
+      geom_bar()
+fig
+```
+
+```{r}
+fig <- ggplot(crunch_data, aes(x = Organization.Name, y = Last.Funding.Amount.Currency..in.USD., fill = Last.Funding.Type)) + 
+       geom_col()
+fig
+```
+```{r}
+fig <- plot_ly(data = crunch_data, x = ~crunch_data$Organization.Name, y = ~crunch_data$Last.Funding.Amount.Currency..in.USD., color = crunch_data$Last.Funding.Type)
+fig <- fig %>% layout(yaxis = list(title = "average Amount Of Money By Investors"), xaxis = list(title = 'Organization Name'))
+fig
+```
+
